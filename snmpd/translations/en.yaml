@@ -1,0 +1,13 @@
+configuration:
+  snmp_community:
+    name: SNMP community
+    description: The SNMP community string used for SNMP queries.
+  snmp_name:
+    name: System name
+    description: An administratively-assigned name for this managed device. By convention, this is the device fully-qualified domain name.
+  snmp_location:
+    name: Location
+    description: The physical location of this device.
+  snmp_contact:
+    name: Contact
+    description: The textual identification of the contact person for this managed device, together with information on how to contact this person.

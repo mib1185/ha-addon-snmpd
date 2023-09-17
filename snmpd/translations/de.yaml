@@ -1,0 +1,13 @@
+configuration:
+  snmp_community:
+    name: SNMP community
+    description: Der SNMP Community String, welche für SNMP Abfragen verwendet wird.
+  snmp_name:
+    name: Systemname
+    description: Ein administrativ zugewiesener Name für dieses Gerät. Gemäß Konvention ist dies der vollqualifizierte Domänenname des Geräts.
+  snmp_location:
+    name: Standort
+    description: Der physische Standort dieses Geräts.
+  snmp_contact:
+    name: Kontakt
+    description: Die textliche Identifikation der Kontaktperson für dieses Gerät, zusammen mit Informationen darüber, wie man diese Person kontaktieren kann.

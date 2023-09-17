@@ -1,0 +1,24 @@
+name: "SNMPD"
+version: "0.1.0"
+slug: "snmpd"
+description: "Monitor your HA installation via snmp"
+url: "https://github.com/mib1185/ha-addon-snmpd"
+arch:
+  - aarch64
+  - amd64
+  - armhf
+  - armv7
+  - i386
+init: false
+startup: services
+host_network: true
+options:
+  snmp_community: pmnsssah
+  snmp_name: ha
+  snmp_location: home
+  snmp_contact: me
+schema:
+  snmp_community: str
+  snmp_name: str
+  snmp_location: str
+  snmp_contact: str
