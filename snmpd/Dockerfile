@@ -1,8 +1,11 @@
 ARG BUILD_FROM
 FROM $BUILD_FROM
 
-RUN apk add --no-cache net-snmp
+RUN apt-get update \
+    && apt-get install -y snmpd \
+    && apt-get clean autoclean \
+    && apt-get autoremove -y
 
-COPY rootfs /
+COPY run.sh /
 
 CMD ["/run.sh"]
