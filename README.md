@@ -4,6 +4,8 @@
 
 ... to get your HA monitored via SNMP (_eq [librenms](https://www.librenms.org/) or [prtg](https://www.paessler.com/de/prtg/prtg-network-monitor)_).
 
+![example_librenms.png](example_librenms.png)
+
 ## How to use this repository
 
 the easiest way is to use the following *my home assistant* link to add this repo as to your add-on store
