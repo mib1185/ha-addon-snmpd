@@ -8,6 +8,7 @@ LOCATION=$(bashio::config 'snmp_location')
 CONTACT=$(bashio::config 'snmp_contact')
 
 HAOS_HOSTNAME=$(curl -s http://supervisor/info -H "Authorization: Bearer ${SUPERVISOR_TOKEN}" | jq -r .data.hostname)
+HAOS_MACHINE=$(curl -s http://supervisor/info -H "Authorization: Bearer ${SUPERVISOR_TOKEN}" | jq -r .data.machine)
 HAOS_OPERATING_SYSTEM=$(curl -s http://supervisor/info -H "Authorization: Bearer ${SUPERVISOR_TOKEN}" | jq -r .data.operating_system)
 
 UN_KERNEL_NAME=$(uname -s)
@@ -40,8 +41,7 @@ EOF
 elif [[ "$UN_MACHINE" == "arm"* ]] || [[ "$UN_MACHINE" == "aarch64"* ]]; then
 cat >> /etc/snmp/snmpd.conf <<EOF
 #libreNMS Hardware Detection
-extend hardware '/bin/cat /sys/firmware/devicetree/base/model'
-extend serial '/bin/cat /sys/firmware/devicetree/base/serial-number'
+extend hardware '/bin/echo $HAOS_MACHINE'
 EOF
 fi
 
