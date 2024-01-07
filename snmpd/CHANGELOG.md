@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.2.3
+- add VScode dev container
+- fix supervisor api permission denied error
+
 ## 0.2.2
 - add additional hass information via `NET-SNMP-EXTEND-MIB`
 - fix logging to not flood the console with snmpd debug log

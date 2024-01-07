@@ -1,5 +1,5 @@
 name: "SNMPD"
-version: "0.2.2"
+version: "0.2.3"
 slug: "snmpd"
 description: "Monitor your HA installation via snmp"
 url: "https://github.com/mib1185/ha-addon-snmpd"
