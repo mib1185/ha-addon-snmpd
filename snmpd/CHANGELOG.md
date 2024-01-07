@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.2.2
+- add additional hass information via `NET-SNMP-EXTEND-MIB`
+
 ## 0.2.1
 - fix libreNMS hardware detection for arm platforms
 

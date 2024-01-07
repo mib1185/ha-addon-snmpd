@@ -7,9 +7,9 @@ NAME=$(bashio::config 'snmp_name')
 LOCATION=$(bashio::config 'snmp_location')
 CONTACT=$(bashio::config 'snmp_contact')
 
-HAOS_HOSTNAME=$(curl -s http://supervisor/info -H "Authorization: Bearer ${SUPERVISOR_TOKEN}" | jq -r .data.hostname)
-HAOS_MACHINE=$(curl -s http://supervisor/info -H "Authorization: Bearer ${SUPERVISOR_TOKEN}" | jq -r .data.machine)
-HAOS_OPERATING_SYSTEM=$(curl -s http://supervisor/info -H "Authorization: Bearer ${SUPERVISOR_TOKEN}" | jq -r .data.operating_system)
+HAOS_HOSTNAME=$(/read_supervisor_data.sh hostname)
+HAOS_MACHINE=$(/read_supervisor_data.sh machine)
+HAOS_OPERATING_SYSTEM=$(/read_supervisor_data.sh operating_system)
 
 UN_KERNEL_NAME=$(uname -s)
 UN_KERNEL_RELEASE=$(uname -r)
@@ -26,6 +26,14 @@ sysdescr $UN_KERNEL_NAME $HAOS_HOSTNAME $UN_KERNEL_RELEASE $UN_KERNEL_VERSION $U
 group MyROGroup v2c readonly
 view all included .1 80
 access MyROGroup "" any noauth exact all none none
+
+# hass data
+extend hass_docker_version '/read_supervisor_data.sh docker'
+extend hass_hassos_version '/read_supervisor_data.sh hassos'
+extend hass_homeassistant_version '/read_supervisor_data.sh homeassistant'
+extend hass_supervisor_version '/read_supervisor_data.sh supervisor'
+extend hass_state '/read_supervisor_data.sh state'
+extend hass_supported '/read_supervisor_data.sh supported'
 
 #libreNMS distro detection
 extend distro '/bin/echo $HAOS_OPERATING_SYSTEM'
