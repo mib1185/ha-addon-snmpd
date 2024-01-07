@@ -6,6 +6,18 @@
 
 ![example_librenms.png](example_librenms.png)
 
+Additional hass related infomration can be gathered via `NET-SNMP-EXTEND-MIB` - example
+
+```shell
+$ snmpwalk -v2c -c public my.ha.local NET-SNMP-EXTEND-MIB::nsExtendOutLine | grep hass_
+NET-SNMP-EXTEND-MIB::nsExtendOutLine."hass_state".1 = STRING: running
+NET-SNMP-EXTEND-MIB::nsExtendOutLine."hass_supported".1 = STRING: true
+NET-SNMP-EXTEND-MIB::nsExtendOutLine."hass_docker_version".1 = STRING: 24.0.7
+NET-SNMP-EXTEND-MIB::nsExtendOutLine."hass_hassos_version".1 = STRING: 11.3
+NET-SNMP-EXTEND-MIB::nsExtendOutLine."hass_supervisor_version".1 = STRING: 2023.12.0
+NET-SNMP-EXTEND-MIB::nsExtendOutLine."hass_homeassistant_version".1 = STRING: 2024.1.2
+```
+
 ## How to use this repository
 
 the easiest way is to use the following *my home assistant* link to add this repo as to your add-on store
