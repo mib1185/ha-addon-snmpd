@@ -6,7 +6,7 @@ RUN apt-get update \
     && apt-get clean autoclean \
     && apt-get autoremove -y
 
-COPY read_supervisor_data.sh /
+COPY bashio_info.sh /
 COPY run.sh /
 
 CMD ["/run.sh"]
