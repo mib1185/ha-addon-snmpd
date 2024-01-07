@@ -16,7 +16,11 @@ UN_KERNEL_RELEASE=$(uname -r)
 UN_KERNEL_VERSION=$(uname -v)
 UN_MACHINE=$(uname -m)
 
-cat > /etc/snmp/snmpd.conf <<EOF
+SNMP_CONF_FILE="/etc/snmp/snmpd.conf"
+
+cat > $SNMP_CONF_FILE <<EOF
+master agentx
+
 com2sec readonly default $COMMUNITY
 sysname $NAME
 syslocation $LOCATION
@@ -40,14 +44,14 @@ extend distro '/bin/echo $HAOS_OPERATING_SYSTEM'
 EOF
 
 if [[ "$UN_MACHINE" == "x86"* ]]; then
-cat >> /etc/snmp/snmpd.conf <<EOF
+cat >> $SNMP_CONF_FILE <<EOF
 #libreNMS Hardware Detection
 extend manufacturer '/bin/cat /sys/devices/virtual/dmi/id/sys_vendor'
 extend hardware '/bin/cat /sys/devices/virtual/dmi/id/product_name'
 extend serial '/bin/cat /sys/devices/virtual/dmi/id/product_serial'
 EOF
 elif [[ "$UN_MACHINE" == "arm"* ]] || [[ "$UN_MACHINE" == "aarch64"* ]]; then
-cat >> /etc/snmp/snmpd.conf <<EOF
+cat >> $SNMP_CONF_FILE <<EOF
 #libreNMS Hardware Detection
 extend hardware '/bin/echo $HAOS_MACHINE'
 EOF
@@ -55,4 +59,4 @@ fi
 
 # Run daemon
 bashio::log.info "Starting the snmpd daemon..."
-snmpd -f -LSid -c /etc/snmp/snmpd.conf
+snmpd -f -LSwd
