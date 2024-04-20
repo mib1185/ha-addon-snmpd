@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.3.0
+- use pre-built images
+
 ## 0.2.3
 - add VScode dev container
 - fix supervisor api permission denied error
