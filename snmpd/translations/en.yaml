@@ -11,3 +11,6 @@ configuration:
   snmp_contact:
     name: Contact
     description: The textual identification of the contact person for this managed device, together with information on how to contact this person.
+  lldp_enabled:
+    name: LLDP
+    description: Enable or disable the lldp support.

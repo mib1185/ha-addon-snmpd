@@ -6,6 +6,7 @@ COMMUNITY=$(bashio::config 'snmp_community')
 NAME=$(bashio::config 'snmp_name')
 LOCATION=$(bashio::config 'snmp_location')
 CONTACT=$(bashio::config 'snmp_contact')
+LLDP_ENABLED=$(bashio::config 'lldp_enabled')
 
 HAOS_HOSTNAME=$(bashio::info.hostname)
 HAOS_MACHINE=$(bashio::info.machine)
@@ -16,9 +17,10 @@ UN_KERNEL_RELEASE=$(uname -r)
 UN_KERNEL_VERSION=$(uname -v)
 UN_MACHINE=$(uname -m)
 
-SNMP_CONF_FILE="/etc/snmp/snmpd.conf"
+SNMPD_CONF_FILE="/etc/snmp/snmpd.conf"
+LLDPD_CONF_FILE="/etc/lldpd.d/ha.conf"
 
-cat > $SNMP_CONF_FILE <<EOF
+cat > $SNMPD_CONF_FILE <<EOF
 master agentx
 
 com2sec readonly default $COMMUNITY
@@ -39,22 +41,35 @@ extend hass_supervisor_version '/usr/bin/bashio /bashio_info.sh supervisor'
 extend hass_state '/usr/bin/bashio /bashio_info.sh state'
 extend hass_supported '/usr/bin/bashio /bashio_info.sh supported'
 
-#libreNMS distro detection
+# libreNMS distro detection
 extend distro '/bin/echo $HAOS_OPERATING_SYSTEM'
 EOF
 
 if [[ "$UN_MACHINE" == "x86"* ]]; then
-cat >> $SNMP_CONF_FILE <<EOF
-#libreNMS Hardware Detection
+cat >> $SNMPD_CONF_FILE <<EOF
+# libreNMS Hardware Detection
 extend manufacturer '/bin/cat /sys/devices/virtual/dmi/id/sys_vendor'
 extend hardware '/bin/cat /sys/devices/virtual/dmi/id/product_name'
 extend serial '/bin/cat /sys/devices/virtual/dmi/id/product_serial'
 EOF
 elif [[ "$UN_MACHINE" == "arm"* ]] || [[ "$UN_MACHINE" == "aarch64"* ]]; then
-cat >> $SNMP_CONF_FILE <<EOF
-#libreNMS Hardware Detection
+cat >> $SNMPD_CONF_FILE <<EOF
+# libreNMS Hardware Detection
 extend hardware '/bin/echo $HAOS_MACHINE'
 EOF
+fi
+
+# write lldpd config
+cat > $LLDPD_CONF_FILE <<EOF
+configure system hostname $NAME
+configure system description "$UN_KERNEL_NAME $HAOS_HOSTNAME $UN_KERNEL_RELEASE $UN_KERNEL_VERSION $UN_MACHINE ($HAOS_OPERATING_SYSTEM)"
+configure system interface pattern *,!veth
+EOF
+
+# start LLDPd
+if [[ "$LLDP_ENABLED" == "true" ]]; then
+bashio::log.info "Starting the lldpd daemon..."
+lldpd -x
 fi
 
 # Run daemon

@@ -6,7 +6,7 @@
 
 ![example_librenms.png](example_librenms.png)
 
-Additional hass related infomration can be gathered via `NET-SNMP-EXTEND-MIB` - example
+Additional hass related information can be gathered via `NET-SNMP-EXTEND-MIB` - example
 
 ```shell
 $ snmpwalk -v2c -c public my.ha.local NET-SNMP-EXTEND-MIB::nsExtendOutLine | grep hass_

@@ -11,3 +11,6 @@ configuration:
   snmp_contact:
     name: Kontakt
     description: Die textliche Identifikation der Kontaktperson für dieses Gerät, zusammen mit Informationen darüber, wie man diese Person kontaktieren kann.
+  lldp_enabled:
+    name: LLDP
+    description: Aktivieren oder deaktivieren der LLDP Unterstützung.
