@@ -41,9 +41,6 @@ extend hass_supervisor_version '/usr/bin/bashio /bashio_info.sh supervisor'
 extend hass_state '/usr/bin/bashio /bashio_info.sh state'
 extend hass_supported '/usr/bin/bashio /bashio_info.sh supported'
 
-# lldpd
-master agentx
-
 # libreNMS distro detection
 extend distro '/bin/echo $HAOS_OPERATING_SYSTEM'
 EOF
