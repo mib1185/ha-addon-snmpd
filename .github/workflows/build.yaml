@@ -28,6 +28,8 @@ jobs:
         run: |
           if [[ -z "${{ github.head_ref }}" ]] && [[ "${{ github.event_name }}" == "push" ]]; then
               echo "BUILD_ARGS=--docker-hub-check" >> $GITHUB_ENV;
+          else
+              echo "BUILD_ARGS=--test" >> $GITHUB_ENV;
           fi
 
       - name: Login to DockerHub
