@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.4.0
+- add lldp support
+
 ## 0.3.0
 - use pre-built images
 
