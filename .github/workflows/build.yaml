@@ -5,6 +5,7 @@ on:
     branches: ["main"]
   push:
     branches: ["main"]
+    tags: ["*"]
 
 jobs:
   build:
@@ -16,7 +17,7 @@ jobs:
 
     steps:
       - name: Check out repository
-        uses: actions/checkout@v4.1.2
+        uses: actions/checkout@v4.2.2
 
       - name: Get information
         id: info
@@ -26,24 +27,26 @@ jobs:
 
       - name: Set build arguments
         run: |
-          if [[ -z "${{ github.head_ref }}" ]] && [[ "${{ github.event_name }}" == "push" ]]; then
-              echo "BUILD_ARGS=--docker-hub-check" >> $GITHUB_ENV;
-          else
-              echo "BUILD_ARGS=--test" >> $GITHUB_ENV;
+          if [[ "${{ github.event_name }}" == "pull_request" ]]; then
+              echo "TEST_FLAG=--test" >> $GITHUB_ENV;
+          fi
+          if [[ "${{ github.event_name }}" == "push" ]] && [[ "${{ github.ref }}" == "refs/heads/main" ]]; then
+              echo "VERSION_FLAG=--version dev --no-latest" >> $GITHUB_ENV;
           fi
 
       - name: Login to DockerHub
-        if: env.BUILD_ARGS == '--docker-hub-check'
-        uses: docker/login-action@v3.1.0
+        if: github.event_name == 'push'
+        uses: docker/login-action@v3.3.0
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
       - name: Build snmpd add-on
-        uses: home-assistant/builder@2024.03.5
+        uses: home-assistant/builder@2024.08.2
         with:
           args: |
-            ${{ env.BUILD_ARGS }} \
+            ${{ env.TEST_FLAG }} \
+            ${{ env.VERSION_FLAG }} \
             --${{ matrix.arch }} \
             --target /data/snmpd \
             --addon
