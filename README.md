@@ -2,7 +2,7 @@
 
 ![Supports aarch64 Architecture][aarch64-shield] ![Supports amd64 Architecture][amd64-shield] ![Supports armhf Architecture][armhf-shield] ![Supports armv7 Architecture][armv7-shield] ![Supports i386 Architecture][i386-shield]
 
-... to get your HA monitored via SNMP (_eq [librenms](https://www.librenms.org/) or [prtg](https://www.paessler.com/de/prtg/prtg-network-monitor)_).
+... to get your HA monitored via SNMP (_eq [librenms](https://www.librenms.org/) or [prtg](https://www.paessler.com/de/prtg/prtg-network-monitor) - only SNMP v2 is currently supported_). Further the [lldp](https://lldpd.github.io/) protocol is also supported.
 
 ![example_librenms.png](example_librenms.png)
 
@@ -26,8 +26,13 @@ the easiest way is to use the following *my home assistant* link to add this rep
 
 Or navigate to **Settings** -> **Add-ons** -> **Add-on store** -> **3 dots top right corner** -> **Repositories** than add `https://github.com/mib1185/ha-addon-snmpd` as new repository.
 
+## How to configure this add-on
+
+see the add-on [docs](snmpd/DOCS.md)
+
 ---
-You like my work?
+
+## You like my work?
 
 <a href="https://www.buymeacoffee.com/mib1185" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Buy Me A Coffee" height="41" width="174"></a>
 
