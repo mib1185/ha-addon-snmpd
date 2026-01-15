@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.5.1
+- fix version bump
+
+## 0.5.0
+- Update base image versions to Debian Trixie
+- fixes the issue "unexpected header length in /proc/net/snmp. 237 != 224"
+
+## 0.4.0
+- add lldp support
+
 ## 0.3.0
 - use pre-built images
 
