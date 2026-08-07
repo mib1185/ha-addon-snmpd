@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.5.2
+- add `snmp_port` option to allow changing the UDP port snmpd listens on (default `161`), useful when another service on the host already binds that port
+
 ## 0.5.1
 - fix version bump
 

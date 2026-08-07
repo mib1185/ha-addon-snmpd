@@ -1,5 +1,5 @@
 name: "SNMPD"
-version: "0.5.1"
+version: "0.5.2"
 slug: "snmpd"
 description: "Monitor your HA installation via snmp"
 url: "https://github.com/mib1185/ha-addon-snmpd"
@@ -18,10 +18,12 @@ options:
   snmp_name: ha
   snmp_location: home
   snmp_contact: me
+  snmp_port: 161
   lldp_enabled: false
 schema:
   snmp_community: str
   snmp_name: str
   snmp_location: str
   snmp_contact: str
+  snmp_port: port
   lldp_enabled: bool
