@@ -23,7 +23,7 @@ lldp_enabled: false
 | `snmp_name`      | SNMP system name | An administratively-assigned name for this managed device. By convention, this is the device fully-qualified domain name.          |
 | `snmp_location`  | SNMP location    | The physical location of this device                                                                                               |
 | `snmp_contact`   | SNMP contact     | The textual identification of the contact person for this managed device, together with information on how to contact this person. |
-| `snmp_port`      | SNMP port        | The UDP port the snmpd daemon listens on. Defaults to `161`. You might want to change it to avoid conflicts with other apps.      |
+| `snmp_port`      | SNMP port        | The UDP port the snmpd daemon listens on. Defaults to `161`. You might want to change it to avoid conflicts with other apps.       |
 | `lldp_enabled`   | LLDP             | Enable or disable the lldp support.                                                                                                |
 
 ## Support
