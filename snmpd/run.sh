@@ -6,6 +6,7 @@ COMMUNITY=$(bashio::config 'snmp_community')
 NAME=$(bashio::config 'snmp_name')
 LOCATION=$(bashio::config 'snmp_location')
 CONTACT=$(bashio::config 'snmp_contact')
+PORT=$(bashio::config 'snmp_port')
 LLDP_ENABLED=$(bashio::config 'lldp_enabled')
 
 HAOS_HOSTNAME=$(bashio::info.hostname)
@@ -22,6 +23,7 @@ LLDPD_CONF_FILE="/etc/lldpd.d/ha.conf"
 
 cat > $SNMPD_CONF_FILE <<EOF
 master agentx
+agentAddress udp:$PORT,udp6:$PORT
 
 com2sec readonly default $COMMUNITY
 sysname $NAME
@@ -73,5 +75,5 @@ lldpd -x
 fi
 
 # Run daemon
-bashio::log.info "Starting the snmpd daemon..."
+bashio::log.info "Starting the snmpd daemon on port $PORT..."
 snmpd -f -LSwd
