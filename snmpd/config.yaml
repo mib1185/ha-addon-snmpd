@@ -27,3 +27,4 @@ schema:
   snmp_contact: str
   snmp_port: port
   lldp_enabled: bool
+  
