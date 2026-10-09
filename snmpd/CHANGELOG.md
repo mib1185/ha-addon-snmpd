@@ -2,6 +2,7 @@
 
 ## 0.7.0
 - add SNMPv3 support, selectable via the new `snmp_version` option (default `v2c`)
+- move the `snmp_community` option to `snmp_v2.community`, existing configurations are migrated automatically
 - add missing translations for `snmp_port`
 
 ## 0.6.0

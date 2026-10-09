@@ -4,11 +4,24 @@
 bashio::log.info "Set snmp configuration..."
 VERSION=$(bashio::config 'snmp_version' 'v2c')
 COMMUNITY=$(bashio::config 'snmp_v2.community')
+
 NAME=$(bashio::config 'snmp_name')
 LOCATION=$(bashio::config 'snmp_location')
 CONTACT=$(bashio::config 'snmp_contact')
 PORT=$(bashio::config 'snmp_port')
 LLDP_ENABLED=$(bashio::config 'lldp_enabled')
+
+# migrate options of previous versions
+if OPTIONS=$(bashio::addon.options) && bashio::jq.exists "${OPTIONS}" ".snmp_community"; then
+    bashio::log.info "Migrating option 'snmp_community' to 'snmp_v2.community'..."
+    # the migrated options are not yet part of the current config, so use the old value directly
+    COMMUNITY=$(bashio::jq "${OPTIONS}" ".snmp_community")
+    # pass the value as raw json string to keep special characters intact
+    if ! bashio::addon.option 'snmp_v2.community' "^$(bashio::jq "${OPTIONS}" ".snmp_community | tojson")" >/dev/null ||
+        ! bashio::addon.option 'snmp_community' >/dev/null; then
+        bashio::log.warning "Failed to migrate option 'snmp_community', please set 'snmp_v2.community' manually"
+    fi
+fi
 
 HAOS_HOSTNAME=$(bashio::info.hostname)
 HAOS_MACHINE=$(bashio::info.machine)
