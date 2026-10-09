@@ -1,28 +1,4 @@
 configuration:
-  snmp_version:
-    name: SNMP version
-    description: The SNMP version to use, either `v2c` (community based) or `v3` (user based with authentication and optional encryption).
-  snmp_community:
-    name: SNMP community
-    description: The SNMP community string used for SNMP queries.
-  snmp_v3_username:
-    name: SNMPv3 username
-    description: The username for SNMPv3 queries. Only used with SNMP version `v3`.
-  snmp_v3_security_level:
-    name: SNMPv3 security level
-    description: With `authPriv` authentication and encryption are required, with `authNoPriv` authentication only. Only used with SNMP version `v3`.
-  snmp_v3_auth_protocol:
-    name: SNMPv3 authentication protocol
-    description: The authentication protocol for SNMPv3. Only used with SNMP version `v3`.
-  snmp_v3_auth_password:
-    name: SNMPv3 authentication password
-    description: The authentication password for SNMPv3 (at least 8 characters). Only used with SNMP version `v3`.
-  snmp_v3_privacy_protocol:
-    name: SNMPv3 privacy protocol
-    description: The encryption protocol for SNMPv3. Only used with SNMP version `v3` and security level `authPriv`.
-  snmp_v3_privacy_password:
-    name: SNMPv3 privacy password
-    description: The encryption password for SNMPv3 (at least 8 characters). Only used with SNMP version `v3` and security level `authPriv`.
   snmp_name:
     name: System name
     description: An administratively-assigned name for this managed device. By convention, this is the device fully-qualified domain name.
@@ -38,3 +14,35 @@ configuration:
   lldp_enabled:
     name: LLDP
     description: Enable or disable the lldp support.
+  snmp_version:
+    name: SNMP version
+    description: The SNMP version to use, either `v2c` (community based) or `v3` (user based with authentication and optional encryption).
+  snmp_v2:
+    name: SNMP v2c settings
+    description: Settings related to SNMP v2c
+    fields:
+      community:
+        name: SNMP community
+        description: The SNMP community string used for SNMP queries.
+  snmp_v3:
+    name: SNMP v3 settings
+    description: Settings related to SNMP v3
+    fields:
+      username:
+        name: SNMPv3 username
+        description: The username for SNMPv3 queries. Only used with SNMP version `v3`.
+      security_level:
+        name: SNMPv3 security level
+        description: With `authPriv` authentication and encryption are required, with `authNoPriv` authentication only. Only used with SNMP version `v3`.
+      auth_protocol:
+        name: SNMPv3 authentication protocol
+        description: The authentication protocol for SNMPv3. Only used with SNMP version `v3`.
+      auth_password:
+        name: SNMPv3 authentication password
+        description: The authentication password for SNMPv3 (at least 8 characters). Only used with SNMP version `v3`.
+      privacy_protocol:
+        name: SNMPv3 privacy protocol
+        description: The encryption protocol for SNMPv3. Only used with SNMP version `v3` and security level `authPriv`.
+      privacy_password:
+        name: SNMPv3 privacy password
+        description: The encryption password for SNMPv3 (at least 8 characters). Only used with SNMP version `v3` and security level `authPriv`.
