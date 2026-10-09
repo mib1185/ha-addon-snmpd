@@ -1,6 +1,15 @@
 #!/usr/bin/with-contenv bashio
 # shellcheck shell=bash
 
+# ensure an option value is a single line, as line breaks would inject additional directives into the generated configs
+require_single_line() {
+    local option=${1}
+    local value=${2}
+    if [[ "$value" == *[$'\r\n']* ]]; then
+        bashio::exit.nok "Option '$option' must not contain line breaks"
+    fi
+}
+
 bashio::log.info "Set snmp configuration..."
 VERSION=$(bashio::config 'snmp_version' 'v2c')
 COMMUNITY=$(bashio::config 'snmp_v2.community')
@@ -22,6 +31,10 @@ if OPTIONS=$(bashio::addon.options) && bashio::jq.exists "${OPTIONS}" ".snmp_com
         bashio::log.warning "Failed to migrate option 'snmp_community', please set 'snmp_v2.community' manually"
     fi
 fi
+
+require_single_line 'snmp_name' "$NAME"
+require_single_line 'snmp_location' "$LOCATION"
+require_single_line 'snmp_contact' "$CONTACT"
 
 HAOS_HOSTNAME=$(bashio::info.hostname)
 HAOS_MACHINE=$(bashio::info.machine)
@@ -56,12 +69,14 @@ if [[ "$VERSION" == "v3" ]]; then
     if ! bashio::config.has_value 'snmp_v3.auth_password' || [[ ${#V3_AUTH_PASSWORD} -lt 8 ]]; then
         bashio::exit.nok "SNMPv3 requires an authentication password with at least 8 characters (snmp_v3.auth_password)"
     fi
+    require_single_line 'snmp_v3.auth_password' "$V3_AUTH_PASSWORD"
 
     V3_USER_ENTRY="createUser $V3_USERNAME $V3_AUTH_PROTOCOL $(quote "$V3_AUTH_PASSWORD")"
     if [[ "$V3_SECURITY_LEVEL" == "authPriv" ]]; then
         if ! bashio::config.has_value 'snmp_v3.privacy_password' || [[ ${#V3_PRIVACY_PASSWORD} -lt 8 ]]; then
             bashio::exit.nok "SNMPv3 with security level authPriv requires a privacy password with at least 8 characters (snmp_v3.privacy_password)"
         fi
+        require_single_line 'snmp_v3.privacy_password' "$V3_PRIVACY_PASSWORD"
         V3_USER_ENTRY="$V3_USER_ENTRY $V3_PRIVACY_PROTOCOL $(quote "$V3_PRIVACY_PASSWORD")"
         V3_ACCESS_LEVEL="priv"
     else
@@ -80,6 +95,7 @@ if [[ "$VERSION" == "v3" ]]; then
 view all included .1 80
 access MyROGroup \"\" usm $V3_ACCESS_LEVEL exact all none none"
 else
+    require_single_line 'snmp_v2.community' "$COMMUNITY"
     ACCESS_CONFIG="com2sec readonly default $COMMUNITY
 group MyROGroup v2c readonly
 view all included .1 80
