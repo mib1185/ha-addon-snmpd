@@ -1,9 +1,8 @@
 # Changelog
 
 ## 0.7.0
-- add SNMPv3 support, selectable via the new `snmp_version` option (default `v2c`)
-- move the `snmp_community` option to `snmp_v2.community`, existing configurations are migrated automatically
-- add missing translations for `snmp_port`
+- add SNMPv3 support
+- rename add-on to app
 
 ## 0.6.0
 - add `snmp_port` option to allow changing the UDP port snmpd listens on (default `161`)

@@ -1,12 +1,12 @@
-# SNMPD Home Assistant add-on
+# SNMPD Home Assistant app
 
 ## How to use
 
-This add-on allows you to monitor your Home Assistant installation via snmp (_v2c_ or _v3_).
+This app allows you to monitor your Home Assistant installation via snmp (_v2c_ or _v3_).
 
 ## Configuration
 
-Add-on configuration:
+App configuration:
 
 ```yaml
 snmp_name: ha
@@ -61,7 +61,7 @@ To use SNMPv3, set `snmp_version` to `v3` and configure at least `username` and 
 | `privacy_protocol` | SNMPv3 privacy protocol        | One of `AES` (default) or `DES`. Only used with security level `authPriv`.                 |
 | `privacy_password` | SNMPv3 privacy password        | The encryption password (at least 8 characters). Required for security level `authPriv`.   |
 
-Example add-on configuration:
+Example app configuration:
 
 ```yaml
 snmp_name: ha
@@ -89,6 +89,10 @@ snmpwalk -v3 -l authPriv -u monitoring -a SHA-256 -A my-auth-password -x AES -X 
 
 ## Support
 
-In case you've found a bug, please [open an issue on our GitHub][issue].
+In case you've found a bug, please [open an issue on GitHub][issue].
 
 [issue]: https://github.com/mib1185/ha-addon-snmpd/issues
+
+## You like my work?
+
+<a href="https://www.buymeacoffee.com/mib1185" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Buy Me A Coffee" height="41" width="174"></a>
