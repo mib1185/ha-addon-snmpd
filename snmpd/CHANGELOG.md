@@ -3,6 +3,7 @@
 ## 0.7.0
 - add SNMPv3 support
 - rename add-on to app
+- reject line breaks in option values, which would break the generated snmpd and lldpd configuration
 
 ## 0.6.0
 - add `snmp_port` option to allow changing the UDP port snmpd listens on (default `161`)
