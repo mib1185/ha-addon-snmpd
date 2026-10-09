@@ -72,6 +72,7 @@ if [[ "$VERSION" == "v3" ]]; then
     # so drop previously stored users to ensure changed credentials are applied
     mkdir -p "$(dirname "$SNMPD_PERSISTENT_CONF_FILE")"
     touch "$SNMPD_PERSISTENT_CONF_FILE"
+    chmod 600 "$SNMPD_PERSISTENT_CONF_FILE"
     sed -i '/^\(usmUser\|createUser\) /d' "$SNMPD_PERSISTENT_CONF_FILE"
     echo "$V3_USER_ENTRY" >> "$SNMPD_PERSISTENT_CONF_FILE"
 
