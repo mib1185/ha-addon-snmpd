@@ -1,8 +1,8 @@
-# SNMPD Home Assistant add-on
+# SNMPD Home Assistant app
 
 ![Supports aarch64 Architecture][aarch64-shield] ![Supports amd64 Architecture][amd64-shield] ![Supports armhf Architecture][armhf-shield] ![Supports armv7 Architecture][armv7-shield] ![Supports i386 Architecture][i386-shield]
 
-... to get your HA monitored via SNMP (_eq [librenms](https://www.librenms.org/) or [prtg](https://www.paessler.com/de/prtg/prtg-network-monitor) - only SNMP v2 is currently supported_). Further the [lldp](https://lldpd.github.io/) protocol is also supported.
+... to get your HA monitored via SNMP (_eq [librenms](https://www.librenms.org/) or [prtg](https://www.paessler.com/de/prtg/prtg-network-monitor) - SNMP v2c and v3 are supported_). Further the [lldp](https://lldpd.github.io/) protocol is also supported.
 
 ![example_librenms.png](example_librenms.png)
 
@@ -20,15 +20,15 @@ NET-SNMP-EXTEND-MIB::nsExtendOutLine."hass_homeassistant_version".1 = STRING: 20
 
 ## How to use this repository
 
-the easiest way is to use the following *my home assistant* link to add this repo as to your add-on store
+the easiest way is to use the following *my home assistant* link to add this repo as to your app store
 
-[![Open your Home Assistant instance and show the add add-on repository dialog with a specific repository URL pre-filled.](https://my.home-assistant.io/badges/supervisor_add_addon_repository.svg)](https://my.home-assistant.io/redirect/supervisor_add_addon_repository/?repository_url=https%3A%2F%2Fgithub.com%2Fmib1185%2Fha-addon-snmpd)
+[![Open your Home Assistant instance and show the add app repository dialog with a specific repository URL pre-filled.](https://my.home-assistant.io/badges/supervisor_add_addon_repository.svg)](https://my.home-assistant.io/redirect/supervisor_add_addon_repository/?repository_url=https%3A%2F%2Fgithub.com%2Fmib1185%2Fha-addon-snmpd)
 
-Or navigate to **Settings** -> **Add-ons** -> **Add-on store** -> **3 dots top right corner** -> **Repositories** than add `https://github.com/mib1185/ha-addon-snmpd` as new repository.
+Or navigate to **Settings** -> **Apps** -> **Install app** -> **3 dots top right corner** -> **Repositories** then add `https://github.com/mib1185/ha-addon-snmpd` as new repository.
 
-## How to configure this add-on
+## How to configure this app
 
-see the add-on [docs](snmpd/DOCS.md)
+see the [docs](snmpd/DOCS.md)
 
 ---
 

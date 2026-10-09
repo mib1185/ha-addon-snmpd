@@ -2,12 +2,26 @@
 # shellcheck shell=bash
 
 bashio::log.info "Set snmp configuration..."
-COMMUNITY=$(bashio::config 'snmp_community')
+VERSION=$(bashio::config 'snmp_version' 'v2c')
+COMMUNITY=$(bashio::config 'snmp_v2.community')
+
 NAME=$(bashio::config 'snmp_name')
 LOCATION=$(bashio::config 'snmp_location')
 CONTACT=$(bashio::config 'snmp_contact')
 PORT=$(bashio::config 'snmp_port')
 LLDP_ENABLED=$(bashio::config 'lldp_enabled')
+
+# migrate options of previous versions
+if OPTIONS=$(bashio::addon.options) && bashio::jq.exists "${OPTIONS}" ".snmp_community"; then
+    bashio::log.info "Migrating option 'snmp_community' to 'snmp_v2.community'..."
+    # the migrated options are not yet part of the current config, so use the old value directly
+    COMMUNITY=$(bashio::jq "${OPTIONS}" ".snmp_community")
+    # pass the value as raw json string to keep special characters intact
+    if ! bashio::addon.option 'snmp_v2.community' "^$(bashio::jq "${OPTIONS}" ".snmp_community | tojson")" >/dev/null ||
+        ! bashio::addon.option 'snmp_community' >/dev/null; then
+        bashio::log.warning "Failed to migrate option 'snmp_community', please set 'snmp_v2.community' manually"
+    fi
+fi
 
 HAOS_HOSTNAME=$(bashio::info.hostname)
 HAOS_MACHINE=$(bashio::info.machine)
@@ -19,21 +33,69 @@ UN_KERNEL_VERSION=$(uname -v)
 UN_MACHINE=$(uname -m)
 
 SNMPD_CONF_FILE="/etc/snmp/snmpd.conf"
+SNMPD_PERSISTENT_CONF_FILE="/var/lib/snmp/snmpd.conf"
 LLDPD_CONF_FILE="/etc/lldpd.d/ha.conf"
+
+# escape a value to be used as quoted string in snmpd config
+quote() {
+    local value="${1//\\/\\\\}"
+    echo "\"${value//\"/\\\"}\""
+}
+
+if [[ "$VERSION" == "v3" ]]; then
+    V3_USERNAME=$(bashio::config 'snmp_v3.username')
+    V3_SECURITY_LEVEL=$(bashio::config 'snmp_v3.security_level' 'authPriv')
+    V3_AUTH_PROTOCOL=$(bashio::config 'snmp_v3.auth_protocol' 'SHA')
+    V3_AUTH_PASSWORD=$(bashio::config 'snmp_v3.auth_password')
+    V3_PRIVACY_PROTOCOL=$(bashio::config 'snmp_v3.privacy_protocol' 'AES')
+    V3_PRIVACY_PASSWORD=$(bashio::config 'snmp_v3.privacy_password')
+
+    if ! bashio::config.has_value 'snmp_v3.username' || [[ ! "$V3_USERNAME" =~ ^[^[:space:]\"\'\\]+$ ]]; then
+        bashio::exit.nok "SNMPv3 requires a username without whitespaces or quotes (snmp_v3.username)"
+    fi
+    if ! bashio::config.has_value 'snmp_v3.auth_password' || [[ ${#V3_AUTH_PASSWORD} -lt 8 ]]; then
+        bashio::exit.nok "SNMPv3 requires an authentication password with at least 8 characters (snmp_v3.auth_password)"
+    fi
+
+    V3_USER_ENTRY="createUser $V3_USERNAME $V3_AUTH_PROTOCOL $(quote "$V3_AUTH_PASSWORD")"
+    if [[ "$V3_SECURITY_LEVEL" == "authPriv" ]]; then
+        if ! bashio::config.has_value 'snmp_v3.privacy_password' || [[ ${#V3_PRIVACY_PASSWORD} -lt 8 ]]; then
+            bashio::exit.nok "SNMPv3 with security level authPriv requires a privacy password with at least 8 characters (snmp_v3.privacy_password)"
+        fi
+        V3_USER_ENTRY="$V3_USER_ENTRY $V3_PRIVACY_PROTOCOL $(quote "$V3_PRIVACY_PASSWORD")"
+        V3_ACCESS_LEVEL="priv"
+    else
+        V3_ACCESS_LEVEL="auth"
+    fi
+
+    # snmpd reads createUser from its persistent config and replaces it by the localized keys,
+    # so drop previously stored users to ensure changed credentials are applied
+    mkdir -p "$(dirname "$SNMPD_PERSISTENT_CONF_FILE")"
+    touch "$SNMPD_PERSISTENT_CONF_FILE"
+    chmod 600 "$SNMPD_PERSISTENT_CONF_FILE"
+    sed -i '/^\(usmUser\|createUser\) /d' "$SNMPD_PERSISTENT_CONF_FILE"
+    echo "$V3_USER_ENTRY" >> "$SNMPD_PERSISTENT_CONF_FILE"
+
+    ACCESS_CONFIG="group MyROGroup usm $V3_USERNAME
+view all included .1 80
+access MyROGroup \"\" usm $V3_ACCESS_LEVEL exact all none none"
+else
+    ACCESS_CONFIG="com2sec readonly default $COMMUNITY
+group MyROGroup v2c readonly
+view all included .1 80
+access MyROGroup \"\" any noauth exact all none none"
+fi
 
 cat > $SNMPD_CONF_FILE <<EOF
 master agentx
 agentAddress udp:$PORT,udp6:$PORT
 
-com2sec readonly default $COMMUNITY
 sysname $NAME
 syslocation $LOCATION
 syscontact $CONTACT
 sysdescr $UN_KERNEL_NAME $HAOS_HOSTNAME $UN_KERNEL_RELEASE $UN_KERNEL_VERSION $UN_MACHINE ($HAOS_OPERATING_SYSTEM)
 
-group MyROGroup v2c readonly
-view all included .1 80
-access MyROGroup "" any noauth exact all none none
+$ACCESS_CONFIG
 
 # hass data
 extend hass_docker_version '/usr/bin/bashio /bashio_info.sh docker'
@@ -75,5 +137,5 @@ lldpd -x
 fi
 
 # Run daemon
-bashio::log.info "Starting the snmpd daemon on port $PORT..."
+bashio::log.info "Starting the snmpd daemon (SNMP $VERSION) on port $PORT..."
 snmpd -f -LSwd
