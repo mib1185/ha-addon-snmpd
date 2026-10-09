@@ -1,5 +1,5 @@
 name: "SNMPD"
-version: "0.6.0"
+version: "0.7.0"
 slug: "snmpd"
 description: "Monitor your HA installation via snmp"
 url: "https://github.com/mib1185/ha-addon-snmpd"
@@ -14,14 +14,25 @@ init: false
 startup: services
 host_network: true
 options:
+  snmp_version: v2c
   snmp_community: pmnsssah
+  snmp_v3_security_level: authPriv
+  snmp_v3_auth_protocol: SHA
+  snmp_v3_privacy_protocol: AES
   snmp_name: ha
   snmp_location: home
   snmp_contact: me
   snmp_port: 161
   lldp_enabled: false
 schema:
+  snmp_version: list(v2c|v3)
   snmp_community: str
+  snmp_v3_username: str?
+  snmp_v3_security_level: list(authPriv|authNoPriv)
+  snmp_v3_auth_protocol: list(MD5|SHA|SHA-224|SHA-256|SHA-384|SHA-512)
+  snmp_v3_auth_password: password(8,)?
+  snmp_v3_privacy_protocol: list(AES|DES)
+  snmp_v3_privacy_password: password(8,)?
   snmp_name: str
   snmp_location: str
   snmp_contact: str

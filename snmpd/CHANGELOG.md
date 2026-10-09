@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.7.0
+- add SNMPv3 support, selectable via the new `snmp_version` option (default `v2c`)
+- add missing translations for `snmp_port`
+
 ## 0.6.0
 - add `snmp_port` option to allow changing the UDP port snmpd listens on (default `161`)
 
