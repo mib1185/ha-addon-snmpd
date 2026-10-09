@@ -3,7 +3,7 @@
 
 bashio::log.info "Set snmp configuration..."
 VERSION=$(bashio::config 'snmp_version' 'v2c')
-COMMUNITY=$(bashio::config 'snmp_community')
+COMMUNITY=$(bashio::config 'snmp_v2.community')
 NAME=$(bashio::config 'snmp_name')
 LOCATION=$(bashio::config 'snmp_location')
 CONTACT=$(bashio::config 'snmp_contact')
@@ -30,24 +30,24 @@ quote() {
 }
 
 if [[ "$VERSION" == "v3" ]]; then
-    V3_USERNAME=$(bashio::config 'snmp_v3_username')
-    V3_SECURITY_LEVEL=$(bashio::config 'snmp_v3_security_level' 'authPriv')
-    V3_AUTH_PROTOCOL=$(bashio::config 'snmp_v3_auth_protocol' 'SHA')
-    V3_AUTH_PASSWORD=$(bashio::config 'snmp_v3_auth_password')
-    V3_PRIVACY_PROTOCOL=$(bashio::config 'snmp_v3_privacy_protocol' 'AES')
-    V3_PRIVACY_PASSWORD=$(bashio::config 'snmp_v3_privacy_password')
+    V3_USERNAME=$(bashio::config 'snmp_v3.username')
+    V3_SECURITY_LEVEL=$(bashio::config 'snmp_v3.security_level' 'authPriv')
+    V3_AUTH_PROTOCOL=$(bashio::config 'snmp_v3.auth_protocol' 'SHA')
+    V3_AUTH_PASSWORD=$(bashio::config 'snmp_v3.auth_password')
+    V3_PRIVACY_PROTOCOL=$(bashio::config 'snmp_v3.privacy_protocol' 'AES')
+    V3_PRIVACY_PASSWORD=$(bashio::config 'snmp_v3.privacy_password')
 
-    if ! bashio::config.has_value 'snmp_v3_username' || [[ ! "$V3_USERNAME" =~ ^[^[:space:]\"\'\\]+$ ]]; then
-        bashio::exit.nok "SNMPv3 requires a username without whitespaces or quotes (snmp_v3_username)"
+    if ! bashio::config.has_value 'snmp_v3.username' || [[ ! "$V3_USERNAME" =~ ^[^[:space:]\"\'\\]+$ ]]; then
+        bashio::exit.nok "SNMPv3 requires a username without whitespaces or quotes (snmp_v3.username)"
     fi
-    if ! bashio::config.has_value 'snmp_v3_auth_password' || [[ ${#V3_AUTH_PASSWORD} -lt 8 ]]; then
-        bashio::exit.nok "SNMPv3 requires an authentication password with at least 8 characters (snmp_v3_auth_password)"
+    if ! bashio::config.has_value 'snmp_v3.auth_password' || [[ ${#V3_AUTH_PASSWORD} -lt 8 ]]; then
+        bashio::exit.nok "SNMPv3 requires an authentication password with at least 8 characters (snmp_v3.auth_password)"
     fi
 
     V3_USER_ENTRY="createUser $V3_USERNAME $V3_AUTH_PROTOCOL $(quote "$V3_AUTH_PASSWORD")"
     if [[ "$V3_SECURITY_LEVEL" == "authPriv" ]]; then
-        if ! bashio::config.has_value 'snmp_v3_privacy_password' || [[ ${#V3_PRIVACY_PASSWORD} -lt 8 ]]; then
-            bashio::exit.nok "SNMPv3 with security level authPriv requires a privacy password with at least 8 characters (snmp_v3_privacy_password)"
+        if ! bashio::config.has_value 'snmp_v3.privacy_password' || [[ ${#V3_PRIVACY_PASSWORD} -lt 8 ]]; then
+            bashio::exit.nok "SNMPv3 with security level authPriv requires a privacy password with at least 8 characters (snmp_v3.privacy_password)"
         fi
         V3_USER_ENTRY="$V3_USER_ENTRY $V3_PRIVACY_PROTOCOL $(quote "$V3_PRIVACY_PASSWORD")"
         V3_ACCESS_LEVEL="priv"
