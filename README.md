@@ -1,6 +1,6 @@
 # SNMPD Home Assistant app
 
-![Supports aarch64 Architecture][aarch64-shield] ![Supports amd64 Architecture][amd64-shield] ![Supports armhf Architecture][armhf-shield] ![Supports armv7 Architecture][armv7-shield] ![Supports i386 Architecture][i386-shield]
+![Supports aarch64 Architecture][aarch64-shield] ![Supports amd64 Architecture][amd64-shield]
 
 ... to get your HA monitored via SNMP (_eq [librenms](https://www.librenms.org/) or [prtg](https://www.paessler.com/de/prtg/prtg-network-monitor) - SNMP v2c and v3 are supported_). Further the [lldp](https://lldpd.github.io/) protocol is also supported.
 
@@ -38,6 +38,3 @@ see the [docs](snmpd/DOCS.md)
 
 [aarch64-shield]: https://img.shields.io/badge/aarch64-yes-green.svg
 [amd64-shield]: https://img.shields.io/badge/amd64-yes-green.svg
-[armhf-shield]: https://img.shields.io/badge/armhf-yes-green.svg
-[armv7-shield]: https://img.shields.io/badge/armv7-yes-green.svg
-[i386-shield]: https://img.shields.io/badge/i386-yes-green.svg
