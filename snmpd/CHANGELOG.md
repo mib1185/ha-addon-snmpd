@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.8.0
+- drop support for the deprecated `armhf`, `armv7` and `i386` architectures
+- build with Docker BuildKit and the new Home Assistant builder actions
+- publish a multi-arch image to GitHub Container Registry (`ghcr.io/mib1185/ha-addon-snmpd`)
+
 ## 0.7.0
 - add SNMPv3 support
 - rename add-on to app
